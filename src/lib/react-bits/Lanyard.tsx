@@ -44,7 +44,7 @@ export default function Lanyard({
   cardImage,
   ropeImage,
   anchorY = 5.5,
-  cardScale = 3
+  cardScale = 5
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState<boolean>(
     () => typeof window !== 'undefined' && window.innerWidth < 768
@@ -126,7 +126,7 @@ function Band({
   cardImage,
   ropeImage,
   anchorY = 5.5,
-  cardScale = 3
+  cardScale = 5
 }: BandProps) {
   const band = useRef<any>(null);
   const fixed = useRef<any>(null);
@@ -212,9 +212,10 @@ function Band({
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+  // Slightly longer rope segments so the bigger card has more room to swing.
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.3]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1.3]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1.3]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
     [0, 1.45, 0]

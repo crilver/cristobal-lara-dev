@@ -61,10 +61,11 @@ export default function Hero() {
         }}
       />
 
-      {/* Lanyard — absolute, fills the right half of the hero so the cord
-          appears to descend from the top of the viewport. Hidden on small
-          screens (the mobile fallback below renders it in normal flow). */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 hidden md:block md:w-[52%] lg:w-[48%] xl:w-[44%]">
+      {/* Lanyard — absolute, fills the right side of the hero. Width tuned
+          so it doesn't cover the nav's right-side controls (CV / theme
+          toggle). Rope visibility relies on the nav being transparent rather
+          than on z-stacking. */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden md:block md:w-[48%] lg:w-[44%] xl:w-[42%]">
         <div className="pointer-events-auto h-full">
           <Suspense
             fallback={
