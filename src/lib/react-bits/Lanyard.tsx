@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
@@ -56,6 +56,36 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Scroll progress 0 → 1 across the hero section. Drives gravity inversion
+  // so the card appears to "climb" the rope as the user scrolls down.
+  const [scrollProgress, setScrollProgress] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      const hero = typeof document !== 'undefined' ? document.getElementById('top') : null;
+      const h = hero?.offsetHeight ?? window.innerHeight;
+      setScrollProgress(Math.min(1, Math.max(0, window.scrollY / h)));
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
+  // Lerp gravity Y from the user-supplied value (default -40, down) toward
+  // its inverted equivalent. Rope joints constrain max distance only, so
+  // segments collapse upward without breaking the simulation.
+  const effectiveGravity = useMemo<[number, number, number]>(() => {
+    const base = gravity[1];
+    return [gravity[0], base - scrollProgress * base * 2, gravity[2]];
+  }, [scrollProgress, gravity]);
+
   return (
     <div className="relative z-0 w-full h-full flex justify-center items-start">
       <Canvas
@@ -65,7 +95,7 @@ export default function Lanyard({
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
         <ambientLight intensity={Math.PI} />
-        <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
+        <Physics gravity={effectiveGravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
           <Band
             isMobile={isMobile}
             cardImage={cardImage}
@@ -213,10 +243,10 @@ function Band({
   const [hovered, hover] = useState(false);
 
   // Slightly longer rope segments so the bigger card has more room to swing.
-  // Rope segment length — slightly longer to give the bigger card more swing.
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.3]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1.3]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1.3]);
+  // Rope segment length — shorter so the card sits closer to the anchor.
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 0.9]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 0.9]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 0.9]);
   // Anchor scales with cardScale so the rope clips to the top of the
   // visible card mesh rather than landing inside it.
   // Derived from the original (cardScale=2.25, anchor=1.45) → 1.1783·s − 1.2

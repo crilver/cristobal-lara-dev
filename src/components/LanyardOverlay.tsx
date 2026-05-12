@@ -46,7 +46,7 @@ export default function LanyardOverlay() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden md:block md:w-[48%] lg:w-[44%] xl:w-[40%]"
+      className="pointer-events-none fixed inset-0 z-50 hidden md:block"
       style={{
         opacity: visible ? 1 : 0,
         transition: 'opacity 600ms cubic-bezier(0.16, 1, 0.3, 1)',
