@@ -1,0 +1,42 @@
+---
+import { nav, site } from '../data/site';
+import ThemeToggle from './ThemeToggle.tsx';
+---
+
+<header
+  class="fixed inset-x-0 top-0 z-40 backdrop-blur-md transition-colors"
+  style="background-color: color-mix(in oklab, var(--color-bg) 75%, transparent);"
+>
+  <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-12 md:py-6">
+    <a
+      href="/"
+      class="font-display text-xl font-medium tracking-tight transition-colors hover:text-accent"
+    >
+      Cristobal Lara
+      <span class="text-accent">.</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-8 md:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="font-mono text-xs uppercase tracking-[0.18em] text-muted-fg transition-colors hover:text-fg"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={site.cvHref}
+        class="hidden rounded-full border border-border-subtle px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] text-fg transition-all hover:border-accent hover:text-accent md:inline-block"
+      >
+        CV ↓
+      </a>
+      <ThemeToggle client:idle />
+    </div>
+  </div>
+</header>
