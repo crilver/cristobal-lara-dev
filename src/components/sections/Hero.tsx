@@ -26,7 +26,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate flex min-h-[100dvh] flex-col overflow-hidden pt-24 md:pt-28"
+      className="relative isolate min-h-[100dvh] overflow-hidden"
       aria-label="Introduction"
     >
       {/* Animated aurora background, amber palette */}
@@ -61,9 +61,27 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-12 px-6 py-12 md:grid-cols-12 md:gap-8 md:px-12 md:py-16 lg:gap-16">
-        {/* Left: type column */}
-        <div className="md:col-span-7 lg:col-span-7">
+      {/* Lanyard — absolute, fills the right half of the hero so the cord
+          appears to descend from the top of the viewport. Hidden on small
+          screens (the mobile fallback below renders it in normal flow). */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden md:block md:w-[52%] lg:w-[48%] xl:w-[44%]">
+        <div className="pointer-events-auto h-full">
+          <Suspense
+            fallback={
+              <div className="flex h-full items-center justify-center font-mono text-xs uppercase tracking-[0.18em] text-muted-fg">
+                Loading badge…
+              </div>
+            }
+          >
+            <CustomLanyard />
+          </Suspense>
+        </div>
+      </div>
+
+      {/* Text column — sits on the left, constrained so it never collides
+          with the Lanyard canvas on desktop. */}
+      <div className="relative mx-auto w-full max-w-[1400px] px-6 pt-28 pb-12 md:px-12 md:pt-32 md:pb-20">
+        <div className="md:max-w-[55%] lg:max-w-[55%]">
           <AnimatedContent
             direction="horizontal"
             distance={-40}
@@ -80,9 +98,11 @@ export default function Hero() {
             </p>
           </AnimatedContent>
 
-          {/* Headline — character-by-character with GSAP SplitText */}
+          {/* Headline — split per char with GSAP. Amber period kept outside
+              SplitText so the per-split last-char rule never grabs the "k"
+              of "Full-stack". */}
           <h1
-            className="amber-hero-dot font-display font-light leading-[0.92] tracking-tight"
+            className="font-display font-light leading-[0.92] tracking-tight"
             style={{ fontSize: 'var(--text-display-1)' }}
           >
             <SplitText
@@ -99,20 +119,23 @@ export default function Hero() {
               rootMargin="0px"
               textAlign="left"
             />
-            <SplitText
-              text="developer."
-              tag="span"
-              className="block"
-              splitType="chars"
-              delay={30}
-              duration={0.9}
-              ease="power4.out"
-              from={{ y: 80, opacity: 0 }}
-              to={{ y: 0, opacity: 1 }}
-              threshold={0}
-              rootMargin="0px"
-              textAlign="left"
-            />
+            <span className="block">
+              <SplitText
+                text="developer"
+                tag="span"
+                className="inline-block"
+                splitType="chars"
+                delay={30}
+                duration={0.9}
+                ease="power4.out"
+                from={{ y: 80, opacity: 0 }}
+                to={{ y: 0, opacity: 1 }}
+                threshold={0}
+                rootMargin="0px"
+                textAlign="left"
+              />
+              <span style={{ color: 'var(--color-accent)' }}>.</span>
+            </span>
           </h1>
 
           <AnimatedContent
@@ -129,7 +152,6 @@ export default function Hero() {
             </p>
           </AnimatedContent>
 
-          {/* CTA row */}
           <AnimatedContent
             direction="vertical"
             distance={20}
@@ -163,57 +185,40 @@ export default function Hero() {
           </AnimatedContent>
         </div>
 
-        {/* Right: Lanyard with custom card */}
-        <div className="relative md:col-span-5 lg:col-span-5">
-          <AnimatedContent
-            direction="vertical"
-            distance={50}
-            duration={1.2}
-            delay={0.3}
-            threshold={0}
-          >
-            <div className="relative h-[520px] w-full md:h-[640px] lg:h-[720px]">
-              <Suspense
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center font-mono text-xs uppercase tracking-[0.18em] text-muted-fg">
-                    Loading card…
-                  </div>
-                }
-              >
-                <CustomLanyard />
-              </Suspense>
-            </div>
-            <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-muted-fg">
-              <span style={{ color: 'var(--color-accent)' }}>↑</span> drag the card
-            </p>
-          </AnimatedContent>
+        {/* Mobile-only Lanyard — sits in normal flow under the text column */}
+        <div className="mt-16 h-[560px] w-full md:hidden">
+          <Suspense fallback={null}>
+            <CustomLanyard />
+          </Suspense>
         </div>
       </div>
 
-      {/* Footer ticker — three concrete facts */}
-      <AnimatedContent
-        direction="vertical"
-        distance={30}
-        duration={0.9}
-        delay={1.2}
-        threshold={0}
-        className="relative w-full"
-      >
-        <ul className="mx-auto mt-8 grid max-w-[1400px] gap-4 border-t border-border-subtle px-6 py-8 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-fg md:grid-cols-3 md:gap-12 md:px-12">
-          {FACTS.map((f) => (
-            <li key={f.num} className="flex items-start gap-3">
-              <span
-                aria-hidden
-                style={{ color: 'var(--color-accent)' }}
-                className="shrink-0 font-mono"
-              >
-                {f.num}
-              </span>
-              <span className="leading-snug text-fg/70">{f.body}</span>
-            </li>
-          ))}
-        </ul>
-      </AnimatedContent>
+      {/* Footer ticker — three concrete facts. Sits at the bottom of the
+          section, constrained to the left so it doesn't underlay the Lanyard. */}
+      <div className="absolute inset-x-0 bottom-0 px-6 pb-8 md:px-12 md:pb-10">
+        <AnimatedContent
+          direction="vertical"
+          distance={30}
+          duration={0.9}
+          delay={1.2}
+          threshold={0}
+        >
+          <ul className="mx-auto grid max-w-[1400px] gap-4 border-t border-border-subtle pt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-fg md:max-w-[55%] md:grid-cols-3 md:gap-8">
+            {FACTS.map((f) => (
+              <li key={f.num} className="flex items-start gap-3">
+                <span
+                  aria-hidden
+                  style={{ color: 'var(--color-accent)' }}
+                  className="shrink-0 font-mono"
+                >
+                  {f.num}
+                </span>
+                <span className="leading-snug text-fg/70">{f.body}</span>
+              </li>
+            ))}
+          </ul>
+        </AnimatedContent>
+      </div>
     </section>
   );
 }

@@ -128,10 +128,8 @@
     color: var(--color-muted-fg);
   }
 
-  /* Amber accent on the trailing period of the SplitText hero headline. */
-  .amber-hero-dot .split-char:last-child {
-    color: var(--color-accent);
-  }
+  /* No-op kept for back-compat — the trailing period now lives outside
+     SplitText so it doesn't pick up the per-split last-char rule. */
 
   .grain::after {
     content: '';

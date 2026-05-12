@@ -16,7 +16,7 @@ import * as THREE from 'three';
 
 // Public-path constants — assets live in /public/assets/ and are served at /assets/.
 const cardGLB = '/assets/card.glb';
-const lanyard = '/assets/lanyard.png';
+const ropeFallback = '/assets/lanyard.png';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
@@ -25,8 +25,15 @@ interface LanyardProps {
   gravity?: [number, number, number];
   fov?: number;
   transparent?: boolean;
-  /** Optional override texture URL applied to the card front. */
+  /** Override texture URL applied to the card's front-face material. */
   cardImage?: string;
+  /** Override texture URL applied to the lanyard rope material. */
+  ropeImage?: string;
+  /** World-space Y of the fixed anchor; raise to make the cord descend from
+   *  higher on screen. Default 4 (vanilla React Bits). */
+  anchorY?: number;
+  /** Scale of the card group (front face mesh). Default 2.25 (vanilla). */
+  cardScale?: number;
 }
 
 export default function Lanyard({
@@ -34,9 +41,14 @@ export default function Lanyard({
   gravity = [0, -40, 0],
   fov = 20,
   transparent = true,
-  cardImage
+  cardImage,
+  ropeImage,
+  anchorY = 5.5,
+  cardScale = 3
 }: LanyardProps) {
-  const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState<boolean>(
+    () => typeof window !== 'undefined' && window.innerWidth < 768
+  );
 
   useEffect(() => {
     const handleResize = (): void => setIsMobile(window.innerWidth < 768);
@@ -45,7 +57,7 @@ export default function Lanyard({
   }, []);
 
   return (
-    <div className="relative z-0 w-full h-screen flex justify-center items-center transform scale-100 origin-center">
+    <div className="relative z-0 w-full h-full flex justify-center items-start">
       <Canvas
         camera={{ position, fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
@@ -54,7 +66,13 @@ export default function Lanyard({
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-          <Band isMobile={isMobile} cardImage={cardImage} />
+          <Band
+            isMobile={isMobile}
+            cardImage={cardImage}
+            ropeImage={ropeImage}
+            anchorY={anchorY}
+            cardScale={cardScale}
+          />
         </Physics>
         <Environment blur={0.75}>
           <Lightformer
@@ -96,10 +114,20 @@ interface BandProps {
   minSpeed?: number;
   isMobile?: boolean;
   cardImage?: string;
+  ropeImage?: string;
+  anchorY?: number;
+  cardScale?: number;
 }
 
-function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: BandProps) {
-  // Using "any" for refs since the exact types depend on Rapier's internals
+function Band({
+  maxSpeed = 50,
+  minSpeed = 0,
+  isMobile = false,
+  cardImage,
+  ropeImage,
+  anchorY = 5.5,
+  cardScale = 3
+}: BandProps) {
   const band = useRef<any>(null);
   const fixed = useRef<any>(null);
   const j1 = useRef<any>(null);
@@ -121,12 +149,14 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
   };
 
   const { nodes, materials } = useGLTF(cardGLB) as any;
-  const texture = useTexture(lanyard);
-  const [overrideMap, setOverrideMap] = useState<THREE.Texture | null>(null);
+  // Always load the fallback rope texture so the hook order is stable.
+  const fallbackRope = useTexture(ropeFallback);
 
+  // ---- Texture override: card front face ----
+  const [cardMap, setCardMap] = useState<THREE.Texture | null>(null);
   useEffect(() => {
     if (!cardImage) {
-      setOverrideMap(null);
+      setCardMap(null);
       return;
     }
     const loader = new THREE.TextureLoader();
@@ -136,16 +166,48 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
         tex.flipY = false;
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = 16;
-        setOverrideMap(tex);
+        setCardMap(tex);
       },
       undefined,
-      () => setOverrideMap(null)
+      // eslint-disable-next-line no-console
+      (err) => console.warn('[Lanyard] card texture failed', err)
     );
   }, [cardImage]);
 
+  // ---- Texture override: rope ----
+  const [ropeMap, setRopeMap] = useState<THREE.Texture | null>(null);
+  useEffect(() => {
+    if (!ropeImage) {
+      setRopeMap(null);
+      return;
+    }
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      ropeImage,
+      (tex) => {
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 16;
+        setRopeMap(tex);
+      },
+      undefined,
+      // eslint-disable-next-line no-console
+      (err) => console.warn('[Lanyard] rope texture failed', err)
+    );
+  }, [ropeImage]);
+
+  const activeRopeTexture = ropeMap ?? fallbackRope;
+  // Ensure wrap settings even on the fallback path.
+  activeRopeTexture.wrapS = activeRopeTexture.wrapT = THREE.RepeatWrapping;
+
   const [curve] = useState(
     () =>
-      new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
+      new THREE.CatmullRomCurve3([
+        new THREE.Vector3(),
+        new THREE.Vector3(),
+        new THREE.Vector3(),
+        new THREE.Vector3()
+      ])
   );
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
@@ -172,7 +234,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
       dir.copy(vec).sub(state.camera.position).normalize();
       vec.add(dir.multiplyScalar(state.camera.position.length()));
-      [card, j1, j2, j3, fixed].forEach(ref => ref.current?.wakeUp());
+      [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
       card.current?.setNextKinematicTranslation({
         x: vec.x - dragged.x,
         y: vec.y - dragged.y,
@@ -180,7 +242,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
       });
     }
     if (fixed.current) {
-      [j1, j2].forEach(ref => {
+      [j1, j2].forEach((ref) => {
         if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
         const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
         ref.current.lerped.lerp(
@@ -200,12 +262,11 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
   });
 
   curve.curveType = 'chordal';
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
   return (
     <>
-      <group position={[0, 4, 0]}>
-        <RigidBody ref={fixed} {...segmentProps} type={'fixed' as RigidBodyProps['type']} />
+      <group position={[0, anchorY, 0]}>
+        <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
         </RigidBody>
@@ -223,7 +284,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
         >
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
-            scale={2.25}
+            scale={cardScale}
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
@@ -238,12 +299,12 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
           >
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
-                map={overrideMap ?? materials.base.map}
+                map={cardMap ?? materials.base.map}
                 map-anisotropy={16}
                 clearcoat={isMobile ? 0 : 1}
                 clearcoatRoughness={0.15}
-                roughness={0.9}
-                metalness={0.8}
+                roughness={0.85}
+                metalness={0.4}
               />
             </mesh>
             <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
@@ -258,9 +319,9 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, cardImage }: Band
           depthTest={false}
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap
-          map={texture}
-          repeat={[-4, 1]}
-          lineWidth={1}
+          map={activeRopeTexture}
+          repeat={[-3, 1]}
+          lineWidth={1.4}
         />
       </mesh>
     </>
