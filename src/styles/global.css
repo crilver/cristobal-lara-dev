@@ -32,6 +32,20 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* React Bits StarBorder keyframes */
+  --animate-star-movement-bottom: star-movement-bottom linear infinite alternate;
+  --animate-star-movement-top: star-movement-top linear infinite alternate;
+}
+
+@keyframes star-movement-bottom {
+  0% { transform: translate(0%, 0%); opacity: 1; }
+  100% { transform: translate(-100%, 0%); opacity: 0; }
+}
+
+@keyframes star-movement-top {
+  0% { transform: translate(0%, 0%); opacity: 1; }
+  100% { transform: translate(100%, 0%); opacity: 0; }
 }
 
 @layer base {
@@ -112,6 +126,11 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--color-muted-fg);
+  }
+
+  /* Amber accent on the trailing period of the SplitText hero headline. */
+  .amber-hero-dot .split-char:last-child {
+    color: var(--color-accent);
   }
 
   .grain::after {

@@ -2,9 +2,9 @@ export const site = {
   name: 'Cristobal Lara',
   shortName: 'Cristobal',
   url: 'https://cristobal-lara.dev',
-  tagline: 'Full-stack engineer shipping polyglot systems',
+  tagline: 'Full-stack web developer — cloud-native, AI-augmented',
   description:
-    'Cristobal Lara is a full-stack engineer in Vancouver building polyglot production systems — multi-tenant SaaS, real-time event pipelines, and the occasional swarm robot.',
+    'Cristobal Lara is a full-stack web developer in Vancouver. He designs, builds, and operates production web systems end-to-end — cloud-native, AI-augmented, with a mechatronics engineering foundation.',
   ogImage: '/og.jpg',
   locale: 'en',
   email: 'cristobal.lara.dev@gmail.com',
