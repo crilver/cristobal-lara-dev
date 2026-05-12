@@ -1,56 +1,20 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy } from 'react';
 
 const CustomLanyard = lazy(() => import('./CustomLanyard'));
 
 /**
- * Page-level fixed overlay for the 3D Lanyard. Sits ABOVE the navbar
- * (z-50 > nav z-40) so the rope crosses over the navbar instead of being
- * clipped by it. Pointer-events: none on the wrapper so the nav and any
- * underlying content stay fully clickable — the tradeoff is that the card
- * can't be dragged, which is acceptable for a portfolio-decoration use.
+ * Lanyard wrapper rendered as a position:absolute child of the Hero section.
+ * Scrolls naturally with the hero — as the page scrolls down the lanyard
+ * rides along (visually "pulled" toward the top of the viewport) and exits
+ * once the hero has scrolled out of view.
  *
- * Fades out once the user scrolls past the hero (tracked via an
- * IntersectionObserver on the #top section).
+ * Pointer-events: none so the nav and any underlying content stay clickable.
  */
 export default function LanyardOverlay() {
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    // Wait a tick — #top is inside an Astro island so it may not be in the
-    // DOM at the very first render.
-    let cancelled = false;
-    let observer: IntersectionObserver | null = null;
-
-    const attach = () => {
-      if (cancelled) return;
-      const hero = document.getElementById('top');
-      if (!hero) {
-        // Try again next frame in case the hero hasn't hydrated yet.
-        requestAnimationFrame(attach);
-        return;
-      }
-      observer = new IntersectionObserver(
-        ([entry]) => setVisible(entry.intersectionRatio > 0.15),
-        { threshold: [0, 0.15, 0.5, 1] }
-      );
-      observer.observe(hero);
-    };
-    attach();
-
-    return () => {
-      cancelled = true;
-      observer?.disconnect();
-    };
-  }, []);
-
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-50 hidden md:block"
-      style={{
-        opacity: visible ? 1 : 0,
-        transition: 'opacity 600ms cubic-bezier(0.16, 1, 0.3, 1)',
-      }}
+      className="pointer-events-none absolute inset-0 z-30 hidden md:block"
     >
       <Suspense fallback={null}>
         <CustomLanyard />

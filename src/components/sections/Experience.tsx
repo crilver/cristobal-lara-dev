@@ -66,6 +66,8 @@ export default function Experience() {
           <AnimatedContent direction="vertical" distance={30} duration={0.8} delay={0.15} threshold={0.1}>
             <a
               href="/Cristobal_Lara_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-3 rounded-full border border-border-subtle px-5 py-3 font-mono text-xs uppercase tracking-[0.18em] text-fg transition-colors hover:border-accent hover:text-accent"
             >
               Download CV ↓

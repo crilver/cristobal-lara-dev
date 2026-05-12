@@ -6,13 +6,13 @@ import Work from '../components/sections/Work.tsx';
 import About from '../components/sections/About.tsx';
 import Experience from '../components/sections/Experience.tsx';
 import Contact from '../components/sections/Contact.tsx';
-import LanyardOverlay from '../components/LanyardOverlay.tsx';
 ---
 
 <Layout>
   <Nav />
   <main id="main">
-    <!-- Hero uses ogl (Aurora). Must be client-only. -->
+    <!-- Hero uses ogl (Aurora) + Three.js (Lanyard, rendered inside).
+         Must be client-only. -->
     <Hero client:only="react" />
     <!-- Work uses Motion (TiltedCard) + GSAP (AnimatedContent). client:visible defers JS until scrolled near. -->
     <Work client:visible />
@@ -20,7 +20,4 @@ import LanyardOverlay from '../components/LanyardOverlay.tsx';
     <Experience client:visible />
     <Contact client:visible />
   </main>
-  <!-- Lanyard sits ABOVE the navbar (z-50) so the rope crosses over it.
-       Fades out when the hero scrolls out of view. -->
-  <LanyardOverlay client:only="react" />
 </Layout>

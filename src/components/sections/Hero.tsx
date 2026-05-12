@@ -2,10 +2,9 @@ import { Suspense, lazy } from 'react';
 import AnimatedContent from '../../lib/react-bits/AnimatedContent';
 import SplitText from '../../lib/react-bits/SplitText';
 import StarBorder from '../../lib/react-bits/StarBorder';
+import LanyardOverlay from '../LanyardOverlay';
 
 // Heavy 3D/WebGL background — lazy-loaded so it doesn't block initial paint.
-// The Lanyard itself lives in a page-level overlay (see LanyardOverlay) so
-// the rope can render above the navbar.
 const SoftAurora = lazy(() => import('../../lib/react-bits/SoftAurora'));
 
 const FACTS = [
@@ -62,10 +61,12 @@ export default function Hero() {
         }}
       />
 
-      {/* Lanyard intentionally NOT rendered here — it's mounted at the
-          page level via <LanyardOverlay /> in index.astro so the rope can
-          cross over the navbar at z-50. The text column below leaves room
-          for it via max-w-[55%]. */}
+      {/* Lanyard as an absolute child of the Hero — scrolls with the
+          hero so it appears "pulled to the top" as the user scrolls
+          down. Sits at z-30 within Hero's stacking context (above text
+          so the card overlays anything beneath it). The text column on
+          the left leaves room for the lanyard via max-w-[55%]. */}
+      <LanyardOverlay />
 
       {/* Text column — sits on the left, constrained so it never collides
           with the Lanyard canvas on desktop. */}

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
@@ -56,36 +56,6 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Scroll progress 0 → 1 across the hero section. Drives gravity inversion
-  // so the card appears to "climb" the rope as the user scrolls down.
-  const [scrollProgress, setScrollProgress] = useState(0);
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      const hero = typeof document !== 'undefined' ? document.getElementById('top') : null;
-      const h = hero?.offsetHeight ?? window.innerHeight;
-      setScrollProgress(Math.min(1, Math.max(0, window.scrollY / h)));
-    };
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(update);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    update();
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, []);
-
-  // Lerp gravity Y from the user-supplied value (default -40, down) toward
-  // its inverted equivalent. Rope joints constrain max distance only, so
-  // segments collapse upward without breaking the simulation.
-  const effectiveGravity = useMemo<[number, number, number]>(() => {
-    const base = gravity[1];
-    return [gravity[0], base - scrollProgress * base * 2, gravity[2]];
-  }, [scrollProgress, gravity]);
-
   return (
     <div className="relative z-0 w-full h-full flex justify-center items-start">
       <Canvas
@@ -95,7 +65,7 @@ export default function Lanyard({
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
         <ambientLight intensity={Math.PI} />
-        <Physics gravity={effectiveGravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
+        <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
           <Band
             isMobile={isMobile}
             cardImage={cardImage}
@@ -302,7 +272,10 @@ function Band({
 
   return (
     <>
-      <group position={[0, anchorY, 0]}>
+      {/* groupX shifts the anchor (and the card hanging below it) to the
+          right of viewport. 5 lands the card around viewport 75-80% on
+          typical desktop aspect ratios. Iterate this single value to taste. */}
+      <group position={[5, anchorY, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
@@ -357,7 +330,7 @@ function Band({
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap
           map={activeRopeTexture}
-          repeat={[-3, 1]}
+          repeat={[-1, 1]}
           lineWidth={1.4}
         />
       </mesh>
