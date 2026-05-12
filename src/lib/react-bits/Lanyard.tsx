@@ -56,15 +56,20 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Scroll progress 0 → 1 across the hero section. Drives gravity inversion
-  // so the card appears to "climb" the rope as the user scrolls down.
+  // Scroll progress 0 → 1 across a tight window at the top of the hero,
+  // so the card starts climbing the rope as soon as the user scrolls
+  // (not gradually over the full hero height).
   const [scrollProgress, setScrollProgress] = useState(0);
   useEffect(() => {
     let raf = 0;
     const update = () => {
       const hero = typeof document !== 'undefined' ? document.getElementById('top') : null;
       const h = hero?.offsetHeight ?? window.innerHeight;
-      setScrollProgress(Math.min(1, Math.max(0, window.scrollY / h)));
+      // Tight mapping: full gravity inversion within the first 5% of hero
+      // scroll. Below that, gravity transitions rapidly through zero, so
+      // the user sees the card move within a few pixels of scrolling.
+      const raw = window.scrollY / Math.max(1, h * 0.05);
+      setScrollProgress(Math.min(1, Math.max(0, raw)));
     };
     const onScroll = () => {
       cancelAnimationFrame(raf);
@@ -78,13 +83,13 @@ export default function Lanyard({
     };
   }, []);
 
-  // Lerp gravity Y from the user-supplied value (default -40, down) toward
-  // its inverted equivalent. Rope joints constrain max distance only, so
-  // segments collapse upward without breaking the simulation.
-  const effectiveGravity = useMemo<[number, number, number]>(() => {
-    const base = gravity[1];
-    return [gravity[0], base - scrollProgress * base * 2, gravity[2]];
-  }, [scrollProgress, gravity]);
+  // Stable scalar deps for the gravity memo so Physics doesn't see a fresh
+  // array on every parent render.
+  const [gx, gy, gz] = gravity;
+  const effectiveGravity = useMemo<[number, number, number]>(
+    () => [gx, gy - scrollProgress * gy * 2, gz],
+    [scrollProgress, gx, gy, gz]
+  );
 
   return (
     <div className="relative z-0 w-full h-full flex justify-center items-start">
@@ -172,7 +177,11 @@ function Band({
 
   const segmentProps: any = {
     type: 'dynamic',
-    canSleep: true,
+    // canSleep: false is critical — when the card settles at the top after
+    // the first scroll-driven rise, Rapier would otherwise put it to sleep
+    // and subsequent gravity changes (scroll up/down again) wouldn't wake
+    // it. Keeping bodies awake makes the scroll animation work repeatedly.
+    canSleep: false,
     colliders: false,
     angularDamping: 4,
     linearDamping: 4
@@ -302,7 +311,9 @@ function Band({
 
   return (
     <>
-      <group position={[0, anchorY, 0]}>
+      {/* groupX 4 puts the anchor (and the settled card directly below it)
+          at roughly viewport 75% on a typical desktop aspect ratio. */}
+      <group position={[4, anchorY, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
