@@ -3,9 +3,10 @@ import AnimatedContent from '../../lib/react-bits/AnimatedContent';
 import SplitText from '../../lib/react-bits/SplitText';
 import StarBorder from '../../lib/react-bits/StarBorder';
 
-// Heavy 3D/WebGL components — lazy-loaded so they don't block initial paint.
+// Heavy 3D/WebGL background — lazy-loaded so it doesn't block initial paint.
+// The Lanyard itself lives in a page-level overlay (see LanyardOverlay) so
+// the rope can render above the navbar.
 const SoftAurora = lazy(() => import('../../lib/react-bits/SoftAurora'));
-const CustomLanyard = lazy(() => import('../CustomLanyard'));
 
 const FACTS = [
   {
@@ -61,23 +62,10 @@ export default function Hero() {
         }}
       />
 
-      {/* Lanyard — absolute, fills the right side of the hero. Width tuned
-          so it doesn't cover the nav's right-side controls (CV / theme
-          toggle). Rope visibility relies on the nav being transparent rather
-          than on z-stacking. */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden md:block md:w-[48%] lg:w-[44%] xl:w-[42%]">
-        <div className="pointer-events-auto h-full">
-          <Suspense
-            fallback={
-              <div className="flex h-full items-center justify-center font-mono text-xs uppercase tracking-[0.18em] text-muted-fg">
-                Loading badge…
-              </div>
-            }
-          >
-            <CustomLanyard />
-          </Suspense>
-        </div>
-      </div>
+      {/* Lanyard intentionally NOT rendered here — it's mounted at the
+          page level via <LanyardOverlay /> in index.astro so the rope can
+          cross over the navbar at z-50. The text column below leaves room
+          for it via max-w-[55%]. */}
 
       {/* Text column — sits on the left, constrained so it never collides
           with the Lanyard canvas on desktop. */}
@@ -186,12 +174,6 @@ export default function Hero() {
           </AnimatedContent>
         </div>
 
-        {/* Mobile-only Lanyard — sits in normal flow under the text column */}
-        <div className="mt-16 h-[560px] w-full md:hidden">
-          <Suspense fallback={null}>
-            <CustomLanyard />
-          </Suspense>
-        </div>
       </div>
 
       {/* Footer ticker — three concrete facts. Sits at the bottom of the

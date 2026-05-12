@@ -213,12 +213,18 @@ function Band({
   const [hovered, hover] = useState(false);
 
   // Slightly longer rope segments so the bigger card has more room to swing.
+  // Rope segment length — slightly longer to give the bigger card more swing.
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.3]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1.3]);
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1.3]);
+  // Anchor scales with cardScale so the rope clips to the top of the
+  // visible card mesh rather than landing inside it.
+  // Derived from the original (cardScale=2.25, anchor=1.45) → 1.1783·s − 1.2
+  // keeps the same "anchor just above visible card top" relationship.
+  const cardAnchorY = 1.1783 * cardScale - 1.2;
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 1.45, 0]
+    [0, cardAnchorY, 0]
   ]);
 
   useEffect(() => {
