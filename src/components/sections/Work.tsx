@@ -178,14 +178,14 @@ function SupportingCard({ project, index }: { project: Project; index: number })
 
 export default function Work() {
   return (
-    <section id="work" className="relative px-6 py-20 md:px-12 md:py-28">
+    <section id="work" className="relative px-6 py-16 md:px-12 md:py-20">
       <div className="mx-auto max-w-[1400px]">
         {/* Cohesive header — eyebrow → title → description stacked and
             left-aligned, constrained width. No far-right split. */}
-        <header className="mb-16 max-w-3xl border-b border-border-subtle pb-10">
+        <header className="mb-12 max-w-3xl border-b border-border-subtle pb-8">
           <AnimatedContent direction="vertical" distance={30} duration={0.8} threshold={0.1}>
             <p className="eyebrow mb-4">
-              <span className="text-accent">§</span> Section 01 · Work
+              <span className="text-accent">//</span> Section 01 · Work
             </p>
             <h2
               className="font-display font-light leading-[0.95] tracking-tight"

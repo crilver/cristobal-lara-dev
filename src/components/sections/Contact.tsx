@@ -10,11 +10,11 @@ const CHANNELS = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative px-6 py-20 md:px-12 md:py-28">
+    <section id="contact" className="relative px-6 pt-16 pb-12 md:px-12 md:pt-20 md:pb-14">
       <div className="mx-auto max-w-[1400px]">
         <AnimatedContent direction="vertical" distance={40} duration={0.9} threshold={0.1}>
           <p className="eyebrow mb-4">
-            <span className="text-accent">§</span> Section 04 · Contact
+            <span className="text-accent">//</span> Section 04 · Contact
           </p>
           <h2
             className="font-display font-light leading-[0.9] tracking-tight"
@@ -79,7 +79,7 @@ export default function Contact() {
         </div>
 
         <AnimatedContent direction="vertical" distance={30} duration={0.8} delay={0.55} threshold={0.1}>
-          <footer className="mt-24 flex flex-wrap items-end justify-between gap-6 border-t border-border-subtle pt-8 font-mono text-xs uppercase tracking-[0.18em] text-muted-fg">
+          <footer className="mt-14 flex flex-wrap items-end justify-between gap-6 border-t border-border-subtle pt-8 font-mono text-xs uppercase tracking-[0.18em] text-muted-fg">
             <p>
               © 2026 Cristobal Lara <span className="text-accent">·</span> Vancouver, BC
             </p>

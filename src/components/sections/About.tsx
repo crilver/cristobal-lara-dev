@@ -10,12 +10,12 @@ const META = [
 
 export default function About() {
   return (
-    <section id="about" className="relative px-6 py-20 md:px-12 md:py-28">
+    <section id="about" className="relative px-6 py-16 md:px-12 md:py-20">
       <div className="mx-auto grid max-w-[1400px] gap-12 md:grid-cols-12 md:gap-16">
         <AnimatedContent direction="vertical" distance={40} duration={0.9} threshold={0.1} className="md:col-span-5">
           <header>
             <p className="eyebrow mb-4">
-              <span className="text-accent">§</span> Section 02 · About
+              <span className="text-accent">//</span> Section 02 · About
             </p>
             <h2
               className="font-display font-light leading-[0.95] tracking-tight"
