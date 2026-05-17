@@ -49,9 +49,10 @@ export default function About() {
               baseRotation={2}
               textClassName="!text-[1.15rem] md:!text-[1.35rem] !font-normal !leading-[1.6] text-fg/90 font-sans"
             >
-              Current stack: NestJS, Astro, React 19, PostgreSQL, AWS / GCP / Cloudflare, with AI
-              woven into the development loop: Claude API, MCP servers, agent skills,
-              context-window optimization.
+              Current stack: NestJS, Java, React 19, PostgreSQL, AWS / GCP / Cloudflare, with AI
+              woven into the development loop: Claude API, MCP servers, agent skills. Nothing in
+              that chain is out of scope for me, schema and APIs through to CDN, CI/CD, and
+              observability.
             </ScrollReveal>
 
             <ScrollReveal

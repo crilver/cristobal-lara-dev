@@ -27,7 +27,7 @@ export default function Contact() {
         <AnimatedContent direction="vertical" distance={30} duration={0.8} delay={0.15} threshold={0.1}>
           <p className="mt-10 max-w-2xl text-xl text-fg/85">
             Open to full-stack, frontend, backend, cloud, or AI-engineering roles in Vancouver.
-            Mid to senior, 75K+ CAD. Remote across Canada works too.
+            Remote across Canada works too.
           </p>
         </AnimatedContent>
 

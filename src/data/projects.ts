@@ -56,6 +56,16 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    slug: 'nyma',
+    title: 'NYMA',
+    tagline: 'Fashion-streetwear e-commerce. Led the 4-phase Sentry observability rollout that surfaced silent prod failures.',
+    role: 'Full-stack Engineer',
+    year: '2025 → 2026',
+    status: 'shipped',
+    stack: ['TypeScript', 'Node.js', 'Sentry', 'PostgreSQL', 'CI/CD'],
+    links: { caseStudy: true },
+  },
+  {
     slug: 'bricks-and-bids',
     title: 'Bricks & Bids',
     tagline: 'LEGO live-auction platform. Stripe migration in 5 zero-downtime phases, Kafka request/reply bid queue.',
@@ -73,16 +83,6 @@ export const projects: Project[] = [
     year: '2024 → 2025',
     status: 'shipped',
     stack: ['TypeScript', 'Node.js', 'GCP', 'PostgreSQL', 'Chrome Extension APIs'],
-    links: { caseStudy: true },
-  },
-  {
-    slug: 'nyma',
-    title: 'NYMA',
-    tagline: 'Fashion-streetwear e-commerce. Led the 4-phase Sentry observability rollout that surfaced silent prod failures.',
-    role: 'Full-stack Engineer',
-    year: '2024 → 2025',
-    status: 'shipped',
-    stack: ['TypeScript', 'Node.js', 'Sentry', 'PostgreSQL', 'CI/CD'],
     links: { caseStudy: true },
   },
   {

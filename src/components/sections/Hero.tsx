@@ -136,9 +136,9 @@ export default function Hero() {
             threshold={0}
           >
             <p className="mt-10 max-w-xl text-balance text-lg leading-snug text-fg/85 md:text-xl">
-              Designing and shipping production web systems:{' '}
-              <span className="text-accent">cloud-native</span>,{' '}
-              <span className="text-accent">AI-augmented</span>, end-to-end. From Vancouver.
+              Designing and shipping production web systems,{' '}
+              <span className="text-accent">end-to-end</span>: frontend, backend, cloud.
+              From Vancouver.
             </p>
           </AnimatedContent>
 
