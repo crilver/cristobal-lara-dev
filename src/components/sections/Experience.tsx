@@ -47,7 +47,7 @@ const ITEMS = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative px-6 py-32 md:px-12 md:py-48">
+    <section id="experience" className="relative px-6 py-20 md:px-12 md:py-28">
       <div className="mx-auto max-w-[1400px]">
         <header className="mb-20 flex flex-wrap items-end justify-between gap-6 border-b border-border-subtle pb-8">
           <AnimatedContent direction="vertical" distance={30} duration={0.8} threshold={0.1}>

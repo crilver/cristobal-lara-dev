@@ -50,14 +50,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString()
     <meta name="generator" content={Astro.generator} />
 
     <script is:inline>
-      // Theme pre-flash guard — read cookie / localStorage and set [data-theme]
-      // before paint so users with a saved preference never see the wrong canvas.
+      // Theme pre-flash guard. The site is dark-first by design (editorial
+      // dark + amber); light is an explicit opt-in via the toggle, NOT the
+      // OS preference. So default to dark and only honor an explicit stored
+      // choice — this also avoids the jarring always-dark-hero / light-body
+      // split for visitors whose OS is set to light mode.
       (function () {
         try {
           var stored = localStorage.getItem('theme');
-          var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-          var theme = stored || (prefersLight ? 'light' : 'dark');
-          document.documentElement.dataset.theme = theme;
+          document.documentElement.dataset.theme = stored === 'light' ? 'light' : 'dark';
         } catch (_) {
           document.documentElement.dataset.theme = 'dark';
         }
@@ -72,5 +73,40 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString()
       Skip to content
     </a>
     <slot />
+
+    <script is:inline>
+      // Robust same-page anchor navigation. Native hash-scroll and the
+      // browser's CSS smooth-scroll are unreliable on this page — the
+      // continuous WebGL render loop (aurora + lanyard) starves the
+      // scroll animation so nav links / hero CTAs appeared dead. A
+      // delegated handler using scrollIntoView() is deterministic here
+      // (the same call drives the section reveals reliably).
+      (function () {
+        document.addEventListener(
+          'click',
+          function (e) {
+            var a = e.target && e.target.closest
+              ? e.target.closest('a[href^="#"]')
+              : null;
+            if (!a) return;
+            var hash = a.getAttribute('href');
+            if (!hash || hash === '#') return;
+            var id = decodeURIComponent(hash.slice(1));
+            var target = document.getElementById(id);
+            if (!target) return;
+            e.preventDefault();
+            // Instant, not smooth: the browser's smooth-scroll engine
+            // (native or JS) gets starved by the continuous WebGL render
+            // loop and stalls mid-scroll. Instant is 100% reliable here.
+            target.scrollIntoView({ behavior: 'auto', block: 'start' });
+            // Reflect the hash without triggering the native jump.
+            if (history.replaceState) {
+              history.replaceState(null, '', hash);
+            }
+          },
+          false
+        );
+      })();
+    </script>
   </body>
 </html>

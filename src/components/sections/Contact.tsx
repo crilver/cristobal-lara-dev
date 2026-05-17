@@ -10,7 +10,7 @@ const CHANNELS = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative px-6 py-32 md:px-12 md:py-48">
+    <section id="contact" className="relative px-6 py-20 md:px-12 md:py-28">
       <div className="mx-auto max-w-[1400px]">
         <AnimatedContent direction="vertical" distance={40} duration={0.9} threshold={0.1}>
           <p className="eyebrow mb-4">

@@ -81,7 +81,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    scroll-behavior: smooth;
+    /* No `scroll-behavior: smooth` — on this heavy continuous-WebGL page
+       the browser's smooth-scroll animation gets starved by the render
+       loop and never reaches the anchor target (nav links / hero CTAs
+       appeared dead). Instant jumps are 100% reliable. */
   }
 
   body {

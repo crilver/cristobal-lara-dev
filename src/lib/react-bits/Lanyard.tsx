@@ -20,6 +20,23 @@ const ropeFallback = '/assets/lanyard.png';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
+// 1×1 dark-pixel texture (#0c0c0e) used as the card's fallback before the
+// canvas texture is ready. Keeping a *texture* in `map` (never null) means
+// the MeshPhysicalMaterial shader variant (USE_MAP) never changes, so
+// swapping in the real card texture doesn't need a manual recompile —
+// and the GLB's embedded React Bits placeholder is never shown.
+const CARD_FALLBACK_TEX = (() => {
+  const tex = new THREE.DataTexture(
+    new Uint8Array([12, 12, 14, 255]),
+    1,
+    1,
+    THREE.RGBAFormat
+  );
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;
+  return tex;
+})();
+
 interface LanyardProps {
   position?: [number, number, number];
   gravity?: [number, number, number];
@@ -57,8 +74,16 @@ export default function Lanyard({
   }, []);
 
   return (
-    <div className="relative z-0 w-full h-full flex justify-center items-start">
+    <div
+      className="relative z-0 w-full h-full flex justify-center items-start"
+      style={{ pointerEvents: 'none' }}
+    >
       <Canvas
+        // R3F forces pointerEvents:'auto' on the canvas container by
+        // default. Without overriding it the (full-hero-sized) canvas
+        // eats every click — including the hero CTA buttons beneath it.
+        // The lanyard is purely decorative now, so disable pointer events.
+        style={{ pointerEvents: 'none' }}
         camera={{ position, fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ alpha: transparent }}
@@ -308,8 +333,11 @@ function Band({
             }}
           >
             <mesh geometry={nodes.card.geometry}>
+              {/* Fallback is a dark 1×1 texture (not the GLB placeholder,
+                  not null) so the shader variant stays constant and the
+                  real texture swaps in without a recompile. */}
               <meshPhysicalMaterial
-                map={cardMap ?? materials.base.map}
+                map={cardMap ?? CARD_FALLBACK_TEX}
                 map-anisotropy={16}
                 clearcoat={isMobile ? 0 : 1}
                 clearcoatRoughness={0.15}

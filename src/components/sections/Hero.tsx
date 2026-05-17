@@ -1,7 +1,6 @@
 import { Suspense, lazy } from 'react';
 import AnimatedContent from '../../lib/react-bits/AnimatedContent';
 import SplitText from '../../lib/react-bits/SplitText';
-import StarBorder from '../../lib/react-bits/StarBorder';
 import LanyardOverlay from '../LanyardOverlay';
 
 // Heavy 3D/WebGL background — lazy-loaded so it doesn't block initial paint.
@@ -26,7 +25,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate min-h-[100dvh] overflow-hidden"
+      className="relative isolate flex min-h-[100dvh] flex-col overflow-hidden"
       aria-label="Introduction"
     >
       {/* Animated aurora background, amber palette */}
@@ -68,9 +67,10 @@ export default function Hero() {
           the left leaves room for the lanyard via max-w-[55%]. */}
       <LanyardOverlay />
 
-      {/* Text column — sits on the left, constrained so it never collides
-          with the Lanyard canvas on desktop. */}
-      <div className="relative mx-auto w-full max-w-[1400px] px-6 pt-28 pb-12 md:px-12 md:pt-32 md:pb-20">
+      {/* Text column — vertically centered in the hero so the section
+          isn't top-loaded with a dead void below. flex-1 lets it take all
+          space between the navbar and the bottom ticker strip. */}
+      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 items-center px-6 pt-28 md:px-12 md:pt-24">
         <div className="md:max-w-[55%] lg:max-w-[55%]">
           <AnimatedContent
             direction="horizontal"
@@ -150,17 +150,18 @@ export default function Hero() {
             threshold={0}
           >
             <div className="mt-12 flex flex-wrap items-center gap-4">
-              <StarBorder
-                as="a"
+              {/* Primary CTA — plain anchor (StarBorder was swallowing the
+                  navigation entirely and its infinite animation destabilized
+                  the page). Filled amber to keep it the primary action. */}
+              <a
                 href="#work"
-                color="#ffb400"
-                speed="5s"
-                className="font-mono"
+                className="group inline-flex items-center gap-3 rounded-[20px] border border-accent bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.18em] text-bg transition-all hover:bg-transparent hover:text-accent"
               >
-                <span className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.18em]">
-                  Browse work <span aria-hidden>↓</span>
+                Browse work
+                <span aria-hidden className="transition-transform group-hover:translate-y-0.5">
+                  ↓
                 </span>
-              </StarBorder>
+              </a>
 
               <a
                 href="#contact"
@@ -177,9 +178,10 @@ export default function Hero() {
 
       </div>
 
-      {/* Footer ticker — three concrete facts. Sits at the bottom of the
-          section, constrained to the left so it doesn't underlay the Lanyard. */}
-      <div className="absolute inset-x-0 bottom-0 px-6 pb-8 md:px-12 md:pb-10">
+      {/* Footer ticker — three concrete facts. In normal flow at the
+          bottom of the flex column (no absolute pinning), so it stays
+          visually connected to the content with no dead gap. */}
+      <div className="relative mx-auto w-full max-w-[1400px] px-6 pb-8 md:px-12 md:pb-10">
         <AnimatedContent
           direction="vertical"
           distance={30}
@@ -187,7 +189,7 @@ export default function Hero() {
           delay={1.2}
           threshold={0}
         >
-          <ul className="mx-auto grid max-w-[1400px] gap-4 border-t border-border-subtle pt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-fg md:max-w-[55%] md:grid-cols-3 md:gap-8">
+          <ul className="grid gap-4 border-t border-border-subtle pt-6 mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-fg md:max-w-[55%] md:grid-cols-3 md:gap-8">
             {FACTS.map((f) => (
               <li key={f.num} className="flex items-start gap-3">
                 <span

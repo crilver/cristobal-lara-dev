@@ -95,17 +95,47 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
       ease
     });
 
+    let played = false;
+    const playOnce = () => {
+      if (played) return;
+      played = true;
+      tl.play();
+    };
+
     const st = ScrollTrigger.create({
       trigger: el,
       scroller: scrollerTarget || window,
       start: `top ${startPct}%`,
       once: true,
-      onEnter: () => tl.play()
+      onEnter: playOnce
     });
+
+    const isAtOrAboveTriggerLine = () => {
+      const viewportH = window.innerHeight || document.documentElement.clientHeight;
+      return el.getBoundingClientRect().top <= viewportH * (startPct / 100);
+    };
+
+    // Robustness: if the element is already at/above the trigger line when
+    // this mounts (nav-anchor jump, deep link, reload-while-scrolled, or a
+    // client:visible island hydrating after the scroll already happened),
+    // the onEnter scroll-cross never fires and the content would stay
+    // visibility:hidden forever. Reveal immediately in that case.
+    if (isAtOrAboveTriggerLine()) {
+      playOnce();
+    }
+
+    // Failsafe against hydration / ScrollTrigger races: if the element is
+    // in view but still hasn't revealed shortly after mount, force it.
+    // Below-the-fold elements are untouched, so the scroll-reveal effect
+    // is preserved — only stuck in-view content gets rescued.
+    const failsafe = window.setTimeout(() => {
+      if (!played && isAtOrAboveTriggerLine()) playOnce();
+    }, 1500);
 
     return () => {
       st.kill();
       tl.kill();
+      window.clearTimeout(failsafe);
     };
   }, [
     container,
