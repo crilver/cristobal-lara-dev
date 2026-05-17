@@ -4,44 +4,44 @@ const ITEMS = [
   {
     org: 'Smart Twigs',
     role: 'SSr Full-stack Engineer',
-    when: '2024 — Present',
+    when: '2024 → Present',
     where: 'Remote (US co.)',
     note: 'Polyglot product work across LEGO auctions (Spring Boot/Kafka/Stripe), cashback infra (Node + GCP), observability rollouts (Sentry), and multi-tenant SaaS bootstrapping.',
   },
   {
     org: 'CCTB · Vancouver',
     role: 'Full-stack Web Developer Diploma (with co-op)',
-    when: '2024 — 2027',
+    when: '2024 → 2027',
     where: 'Vancouver, BC',
     note: 'Co-op track running concurrent with paid full-stack work. Coursework done; in the work-term portion through 2027.',
   },
   {
     org: 'Hunter Ecuador',
     role: 'Software Developer',
-    when: 'Feb — Jun 2024',
+    when: 'Feb → Jun 2024',
     where: 'Guayaquil, EC',
     note: 'First commercial full-stack role after graduation. Internal tooling and integrations.',
   },
   {
     org: 'ESPOL University',
     role: 'Software Developer',
-    when: 'Oct — Dec 2023',
+    when: 'Oct → Dec 2023',
     where: 'Guayaquil, EC',
     note: 'University-funded engineering software contract immediately following the mechatronics degree.',
   },
   {
     org: 'IRIDIA · ULB',
     role: 'Research Intern · Mercator platform',
-    when: 'Feb — May 2023',
+    when: 'Feb → May 2023',
     where: 'Brussels, BE',
     note: 'Modular swarm-robot research at the Université libre de Bruxelles AI lab. Co-author on the HardwareX 2026 paper.',
   },
   {
-    org: 'ESPOL — Engineering',
+    org: 'ESPOL · Engineering',
     role: 'B.Sc. Mechatronics Engineering',
-    when: '2017 — 2023',
+    when: '2017 → 2023',
     where: 'Guayaquil, EC',
-    note: 'Thesis: open-source 3D-printed three-fingered robotic gripper — published in Biomimetics, MDPI (2025).',
+    note: 'Thesis: open-source 3D-printed three-fingered robotic gripper, published in Biomimetics, MDPI (2025).',
   },
 ];
 
@@ -53,7 +53,7 @@ export default function Experience() {
           <AnimatedContent direction="vertical" distance={30} duration={0.8} threshold={0.1}>
             <div>
               <p className="eyebrow mb-4">
-                <span className="text-accent">§</span> Section 03 — Experience
+                <span className="text-accent">§</span> Section 03 · Experience
               </p>
               <h2
                 className="font-display font-light leading-[0.95] tracking-tight"

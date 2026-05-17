@@ -15,7 +15,7 @@ export default function About() {
         <AnimatedContent direction="vertical" distance={40} duration={0.9} threshold={0.1} className="md:col-span-5">
           <header>
             <p className="eyebrow mb-4">
-              <span className="text-accent">§</span> Section 02 — About
+              <span className="text-accent">§</span> Section 02 · About
             </p>
             <h2
               className="font-display font-light leading-[0.95] tracking-tight"
@@ -38,7 +38,7 @@ export default function About() {
               textClassName="!text-[1.15rem] md:!text-[1.35rem] !font-normal !leading-[1.6] text-fg/90 font-sans"
             >
               I'm a full-stack web developer based in Vancouver. I design, build, and operate
-              production web systems end-to-end — frontend, backend, infrastructure, observability,
+              production web systems end-to-end: frontend, backend, infrastructure, observability,
               security.
             </ScrollReveal>
 
@@ -50,7 +50,7 @@ export default function About() {
               textClassName="!text-[1.15rem] md:!text-[1.35rem] !font-normal !leading-[1.6] text-fg/90 font-sans"
             >
               Current stack: NestJS, Astro, React 19, PostgreSQL, AWS / GCP / Cloudflare, with AI
-              woven into the development loop — Claude API, MCP servers, agent skills,
+              woven into the development loop: Claude API, MCP servers, agent skills,
               context-window optimization.
             </ScrollReveal>
 
@@ -64,7 +64,7 @@ export default function About() {
               The foundation underneath: a mechatronics engineering degree from ESPOL, a research
               stint at IRIDIA (Université libre de Bruxelles), two peer-reviewed publications, and
               five years leading IEEE Robotics & Automation Society. The engineering-systems
-              background is why I think end-to-end — not the headline.
+              background is why I think end-to-end, not the headline.
             </ScrollReveal>
           </div>
 

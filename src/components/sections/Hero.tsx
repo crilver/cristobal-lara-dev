@@ -9,15 +9,15 @@ const SoftAurora = lazy(() => import('../../lib/react-bits/SoftAurora'));
 const FACTS = [
   {
     num: '01',
-    body: 'Shipping production SaaS — sole engineer, live tenant in Ecuador.',
+    body: 'Shipping production SaaS. Sole engineer, live tenant in Ecuador.',
   },
   {
     num: '02',
-    body: 'Co-author × 2 — HardwareX 2026 & Biomimetics MDPI 2025.',
+    body: 'Co-author × 2. HardwareX 2026 & Biomimetics MDPI 2025.',
   },
   {
     num: '03',
-    body: '1st place — NASA Space Apps Challenge 2025, Vancouver.',
+    body: '1st place. NASA Space Apps Challenge 2025, Vancouver.',
   },
 ];
 
@@ -136,7 +136,7 @@ export default function Hero() {
             threshold={0}
           >
             <p className="mt-10 max-w-xl text-balance text-lg leading-snug text-fg/85 md:text-xl">
-              Designing and shipping production web systems —{' '}
+              Designing and shipping production web systems:{' '}
               <span className="text-accent">cloud-native</span>,{' '}
               <span className="text-accent">AI-augmented</span>, end-to-end. From Vancouver.
             </p>

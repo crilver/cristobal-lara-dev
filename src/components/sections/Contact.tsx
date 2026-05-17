@@ -14,7 +14,7 @@ export default function Contact() {
       <div className="mx-auto max-w-[1400px]">
         <AnimatedContent direction="vertical" distance={40} duration={0.9} threshold={0.1}>
           <p className="eyebrow mb-4">
-            <span className="text-accent">§</span> Section 04 — Contact
+            <span className="text-accent">§</span> Section 04 · Contact
           </p>
           <h2
             className="font-display font-light leading-[0.9] tracking-tight"
@@ -26,8 +26,8 @@ export default function Contact() {
 
         <AnimatedContent direction="vertical" distance={30} duration={0.8} delay={0.15} threshold={0.1}>
           <p className="mt-10 max-w-2xl text-xl text-fg/85">
-            Open to full-stack, frontend, backend, cloud, or AI-engineering roles in Vancouver —
-            mid to senior, 75K+ CAD. Remote across Canada works too.
+            Open to full-stack, frontend, backend, cloud, or AI-engineering roles in Vancouver.
+            Mid to senior, 75K+ CAD. Remote across Canada works too.
           </p>
         </AnimatedContent>
 

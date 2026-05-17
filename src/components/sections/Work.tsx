@@ -185,7 +185,7 @@ export default function Work() {
         <header className="mb-16 max-w-3xl border-b border-border-subtle pb-10">
           <AnimatedContent direction="vertical" distance={30} duration={0.8} threshold={0.1}>
             <p className="eyebrow mb-4">
-              <span className="text-accent">§</span> Section 01 — Work
+              <span className="text-accent">§</span> Section 01 · Work
             </p>
             <h2
               className="font-display font-light leading-[0.95] tracking-tight"

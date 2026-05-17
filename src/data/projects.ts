@@ -32,7 +32,7 @@ export const projects: Project[] = [
     title: 'CoraVet',
     tagline: 'Multi-tenant veterinary SaaS, sole engineer, live in production.',
     role: 'Founder · Full-stack',
-    year: '2025 — now',
+    year: '2025 → now',
     status: 'live',
     stack: ['NestJS 11', 'Prisma 7', 'PostgreSQL', 'Astro 5', 'React 19', 'Cloudflare R2'],
     links: {
@@ -45,7 +45,7 @@ export const projects: Project[] = [
     slug: 'aeroanalytics',
     title: 'AeroAnalytics',
     tagline:
-      '1st place — NASA Space Apps Challenge 2025, Vancouver (23 teams). Continent-scale air-quality dashboard over NASA TEMPO data.',
+      '1st place. NASA Space Apps Challenge 2025, Vancouver (23 teams). Continent-scale air-quality dashboard over NASA TEMPO data.',
     role: 'Full-stack Engineer',
     year: '2025',
     status: 'shipped',
@@ -58,9 +58,9 @@ export const projects: Project[] = [
   {
     slug: 'bricks-and-bids',
     title: 'Bricks & Bids',
-    tagline: 'LEGO live-auction platform — Stripe migration in 5 zero-downtime phases, Kafka request/reply bid queue.',
+    tagline: 'LEGO live-auction platform. Stripe migration in 5 zero-downtime phases, Kafka request/reply bid queue.',
     role: 'Backend Engineer',
-    year: '2024 — 2025',
+    year: '2024 → 2025',
     status: 'shipped',
     stack: ['Spring Boot 3.x', 'Java 17', 'Kafka', 'Stripe', 'PostgreSQL'],
     links: { caseStudy: true },
@@ -68,9 +68,9 @@ export const projects: Project[] = [
   {
     slug: 'joinredeemer',
     title: 'JoinRedeemer',
-    tagline: 'Chrome cashback extension across 30+ retailers — cut GCP SQL costs by 42% through query and infra rework.',
+    tagline: 'Chrome cashback extension across 30+ retailers. Cut GCP SQL costs by 42% through query and infra rework.',
     role: 'Full-stack Engineer',
-    year: '2024 — 2025',
+    year: '2024 → 2025',
     status: 'shipped',
     stack: ['TypeScript', 'Node.js', 'GCP', 'PostgreSQL', 'Chrome Extension APIs'],
     links: { caseStudy: true },
@@ -78,9 +78,9 @@ export const projects: Project[] = [
   {
     slug: 'nyma',
     title: 'NYMA',
-    tagline: 'Fashion-streetwear e-commerce — led the 4-phase Sentry observability rollout that surfaced silent prod failures.',
+    tagline: 'Fashion-streetwear e-commerce. Led the 4-phase Sentry observability rollout that surfaced silent prod failures.',
     role: 'Full-stack Engineer',
-    year: '2024 — 2025',
+    year: '2024 → 2025',
     status: 'shipped',
     stack: ['TypeScript', 'Node.js', 'Sentry', 'PostgreSQL', 'CI/CD'],
     links: { caseStudy: true },
