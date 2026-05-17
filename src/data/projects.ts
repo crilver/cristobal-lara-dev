@@ -40,7 +40,6 @@ export const projects: Project[] = [
       caseStudy: true,
     },
     featured: true,
-    ai: true,
   },
   {
     slug: 'aeroanalytics',

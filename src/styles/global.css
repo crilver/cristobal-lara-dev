@@ -145,3 +145,183 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
+
+/* ───────────────────────────────────────────────────────────
+   Device mockup — laptop (primary) + phone (secondary).
+   Ported from the CoraVet marketing landing page; geometry and
+   animation kept 1:1, colours retuned from CoraVet green to the
+   portfolio's neutral-dark + amber palette so it sits in the
+   editorial-dark card. Classes namespaced `cv-` to avoid clashes.
+   ─────────────────────────────────────────────────────────── */
+.cv-device-cluster {
+  position: relative;
+  z-index: 1;
+  width: 80%;
+  max-width: 560px;
+  margin-inline: auto;
+  padding-right: 6%;
+  padding-bottom: 6%;
+  margin-left: 0;
+}
+
+.cv-laptop {
+  position: relative;
+  width: 100%;
+  transform: rotate(-3deg);
+  transform-origin: center center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55));
+}
+
+.cv-laptop-screen {
+  aspect-ratio: 16 / 10;
+  border-radius: 14px 14px 4px 4px;
+  background:
+    linear-gradient(135deg, rgba(255, 180, 0, 0.1), rgba(255, 180, 0, 0.03)),
+    #08080a;
+  border: 10px solid #101012;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255, 180, 0, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.cv-laptop-screen::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.cv-laptop-base {
+  position: relative;
+  width: 110%;
+  height: 22px;
+  margin: 0 -5%;
+  top: -2px;
+  background: linear-gradient(180deg, #1c1c1f 0%, #141416 45%, #0a0a0b 100%);
+  border-radius: 0 0 24px 24px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 180, 0, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 0 48px -8px rgba(255, 180, 0, 0.1);
+}
+
+.cv-laptop-base::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18%;
+  height: 5px;
+  background: linear-gradient(180deg, #0a0a0b 0%, #050506 100%);
+  border-radius: 0 0 4px 4px;
+}
+
+.cv-phone {
+  width: 24%;
+  max-width: 135px;
+  aspect-ratio: 9 / 19;
+  position: absolute;
+  right: 0;
+  bottom: -8%;
+  border: 6px solid #101012;
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(255, 180, 0, 0.1), rgba(255, 180, 0, 0.03)),
+    #08080a;
+  box-shadow:
+    0 40px 80px -20px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 180, 0, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transform: rotate(7deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  overflow: hidden;
+}
+
+.cv-phone-notch {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  z-index: 3;
+}
+
+.cv-screen-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* Coordinated hover — both devices straighten slightly and pop forward.
+   Keyed to the CARD (.cv-card), not the cluster: the mockup wrapper is
+   pointer-events:none (it's a background), so it never receives hover
+   itself. Hovering anywhere on the card triggers it alongside GlareHover. */
+.cv-card:hover .cv-laptop {
+  transform: rotate(-1.5deg) scale(1.015);
+}
+
+.cv-card:hover .cv-phone {
+  transform: rotate(4deg) translateY(-6px) scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-laptop,
+  .cv-phone,
+  .cv-card:hover .cv-laptop,
+  .cv-card:hover .cv-phone {
+    transition: none;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   AeroAnalytics card — theme-aware background screenshot.
+   Pure-CSS swap (no JS, instant on theme toggle): dark site shows
+   the dark-mode capture, light site shows the light-mode capture.
+   .aa-bg owns its transform so vertical centering survives the
+   hover scale.
+   ─────────────────────────────────────────────────────────── */
+.aa-bg {
+  transform: translateY(-50%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aa-bg-light {
+  display: none;
+}
+
+:root[data-theme='light'] .aa-bg-dark {
+  display: none;
+}
+
+:root[data-theme='light'] .aa-bg-light {
+  display: block;
+}
+
+.aa-card:hover .aa-bg {
+  transform: translateY(-50%) scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aa-bg,
+  .aa-card:hover .aa-bg {
+    transition: none;
+  }
+}
