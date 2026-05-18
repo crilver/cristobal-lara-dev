@@ -14,11 +14,18 @@ export default function LanyardOverlay() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-0 z-30 hidden md:block"
+      className="pointer-events-none absolute inset-0 z-30 hidden lg:block"
     >
-      <Suspense fallback={null}>
-        <CustomLanyard />
-      </Suspense>
+      {/* Constrain the lanyard stage to the same max-w-[1400px] centered
+          column as the hero text. The Lanyard canvas is w-full h-full, so
+          capping this wrapper keeps the badge pinned beside the text at
+          every viewport instead of drifting into the empty side gutters
+          on ultra-wide screens. */}
+      <div className="relative mx-auto h-full w-full max-w-[1400px]">
+        <Suspense fallback={null}>
+          <CustomLanyard />
+        </Suspense>
+      </div>
     </div>
   );
 }

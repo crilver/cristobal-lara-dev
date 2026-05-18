@@ -8,7 +8,7 @@ import ThemeToggle from './ThemeToggle.tsx';
   class="fixed inset-x-0 top-0 z-40 transition-[background-color,backdrop-filter] duration-300"
   data-scrolled="false"
 >
-  <div class="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-12 md:py-6">
+  <div class="relative z-20 mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-12 md:py-6">
     <a
       href="/"
       class="font-display text-xl font-medium tracking-tight transition-colors hover:text-accent"
@@ -54,10 +54,98 @@ import ThemeToggle from './ThemeToggle.tsx';
           <line x1="10" y1="14" x2="21" y2="3"></line>
         </svg>
       </a>
+      <button
+        id="nav-menu-btn"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="inline-flex items-center justify-center rounded-full border border-border-subtle p-2 text-fg transition-colors hover:border-accent hover:text-accent md:hidden"
+      >
+        <svg
+          id="nav-menu-icon-open"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <svg
+          id="nav-menu-icon-close"
+          class="hidden"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
       <ThemeToggle client:idle />
     </div>
   </div>
 </header>
+
+{/* Mobile menu — full-screen overlay (links + Resume). Rendered OUTSIDE
+    <header> on purpose: the header gets `backdrop-filter` when scrolled,
+    which would make it the containing block for this fixed element and
+    collapse `inset-0` to the ~60px header box. As a sibling it's
+    viewport-fixed. z-30 keeps it under the bar (z-40) so the close (×)
+    button and logo stay on top and tappable. Hidden by default and >=md. */}
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-30 hidden flex-col bg-bg/95 backdrop-blur-xl md:hidden"
+>
+  <nav aria-label="Mobile" class="flex flex-1 flex-col justify-center gap-3 px-8">
+    {
+      nav.map((item) => (
+        <a
+          href={item.href}
+          data-nav-link
+          class="font-display text-4xl font-light tracking-tight text-fg transition-colors hover:text-accent"
+        >
+          {item.label}
+        </a>
+      ))
+    }
+    <a
+      href={site.cvHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-nav-link
+      class="mt-10 inline-flex w-fit items-center gap-2 rounded-full border border-border-subtle px-5 py-3 font-mono text-xs uppercase tracking-[0.18em] text-fg transition-all hover:border-accent hover:text-accent"
+    >
+      Resume
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <line x1="10" y1="14" x2="21" y2="3"></line>
+      </svg>
+    </a>
+  </nav>
+</div>
 
 <style>
   /* Transparent at top of page so the lanyard's rope reads cleanly over
@@ -84,5 +172,49 @@ import ThemeToggle from './ThemeToggle.tsx';
     };
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+</script>
+
+<script is:inline>
+  // Mobile menu open/close. Pure DOM, no framework — toggles the
+  // overlay's display, swaps the hamburger/close icon, locks body
+  // scroll while open, and closes on link click, Escape, or resize
+  // up to the desktop breakpoint.
+  (() => {
+    const btn = document.getElementById('nav-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('nav-menu-icon-open');
+    const iconClose = document.getElementById('nav-menu-icon-close');
+    if (!btn || !menu) return;
+
+    const setOpen = (open) => {
+      menu.classList.toggle('hidden', !open);
+      menu.classList.toggle('flex', open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (iconOpen) iconOpen.classList.toggle('hidden', open);
+      if (iconClose) iconClose.classList.toggle('hidden', !open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+
+    btn.addEventListener('click', () => {
+      setOpen(menu.classList.contains('hidden'));
+    });
+
+    menu.querySelectorAll('[data-nav-link]').forEach((a) => {
+      a.addEventListener('click', () => setOpen(false));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        setOpen(false);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768 && !menu.classList.contains('hidden')) {
+        setOpen(false);
+      }
+    });
   })();
 </script>

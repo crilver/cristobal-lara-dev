@@ -201,7 +201,7 @@ export default function Work() {
         </header>
 
         {/* Featured projects — large content-led cards */}
-        <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
           {featuredProjects.map((p, i) => (
             <FeaturedCard key={p.slug} project={p} index={i} />
           ))}

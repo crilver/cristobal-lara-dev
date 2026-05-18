@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local dev tooling — Playwright UI-audit harnesses + asset-gen recipe.
+# Kept on disk for future use, never shipped in the portfolio repo.
+scripts/

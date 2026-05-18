@@ -70,8 +70,8 @@ export default function Hero() {
       {/* Text column — vertically centered in the hero so the section
           isn't top-loaded with a dead void below. flex-1 lets it take all
           space between the navbar and the bottom ticker strip. */}
-      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 items-center px-6 pt-28 md:px-12 md:pt-24">
-        <div className="md:max-w-[55%] lg:max-w-[55%]">
+      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 items-start px-6 pt-20 md:px-12 md:pt-24 lg:items-center">
+        <div className="lg:max-w-[55%]">
           <AnimatedContent
             direction="horizontal"
             distance={-40}
@@ -189,7 +189,7 @@ export default function Hero() {
           delay={1.2}
           threshold={0}
         >
-          <ul className="grid gap-4 border-t border-border-subtle pt-6 mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-fg md:max-w-[55%] md:grid-cols-3 md:gap-8">
+          <ul className="grid gap-4 border-t border-border-subtle pt-6 mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-fg md:grid-cols-3 md:gap-8 lg:max-w-[55%]">
             {FACTS.map((f) => (
               <li key={f.num} className="flex items-start gap-3">
                 <span
