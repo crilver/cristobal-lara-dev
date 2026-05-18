@@ -17,12 +17,18 @@ pnpm-debug.log*
 .env
 .env.production
 
-# macOS-specific files
+# OS / editor files
 .DS_Store
-
-# jetbrains setting folder
+Thumbs.db
 .idea/
+.vscode/
 
 # local dev tooling — Playwright UI-audit harnesses + asset-gen recipe.
 # Kept on disk for future use, never shipped in the portfolio repo.
 scripts/
+
+# performance / audit output (Unlighthouse)
+.unlighthouse/
+
+# stray screenshot dumps from local audit scripts (never code)
+/Userscris_*

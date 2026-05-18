@@ -51,6 +51,20 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
     const el = ref.current;
     if (!el) return;
 
+    // Mobile / reduced-motion: skip GSAP entirely (no ScrollTrigger, no
+    // timeline — that work is the main-thread cost on phones). Just reveal
+    // with a compositor-only CSS fade. Desktop (>=lg) keeps the full
+    // cinematic GSAP path below, unchanged.
+    const lite =
+      !window.matchMedia('(min-width: 1024px)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (lite) {
+      el.classList.remove('invisible');
+      el.style.visibility = 'visible';
+      el.classList.add('rb-fade-in');
+      return;
+    }
+
     let scrollerTarget: Element | string | null = container || document.getElementById('snap-main-container') || null;
 
     if (typeof scrollerTarget === 'string') {

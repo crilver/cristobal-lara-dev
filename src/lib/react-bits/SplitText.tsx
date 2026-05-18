@@ -62,6 +62,18 @@ const SplitText: React.FC<SplitTextProps> = ({
       if (!ref.current || !text || !fontsLoaded) return;
       // Prevent re-animation if already completed
       if (animationCompletedRef.current) return;
+
+      // Mobile / reduced-motion: skip the GSAP per-character split (the
+      // splitting + ScrollTrigger measuring is the main-thread cost on
+      // phones). The text is already visible from SSR; just give it the
+      // cheap CSS fade. Desktop (>=lg) keeps the full SplitText path.
+      const lite =
+        !window.matchMedia('(min-width: 1024px)').matches ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (lite) {
+        ref.current.classList.add('rb-fade-in');
+        return;
+      }
       const el = ref.current as HTMLElement & {
         _rbsplitInstance?: GSAPSplitText;
       };
@@ -100,6 +112,10 @@ const SplitText: React.FC<SplitTextProps> = ({
         wordsClass: 'split-word',
         charsClass: 'split-char',
         reduceWhiteSpace: false,
+        // Don't let GSAP add aria-label to the (generic-role) split element —
+        // that trips axe's "aria-prohibited-attr". We expose the text via an
+        // sr-only node and aria-hidden the visual split instead (see render).
+        aria: 'none',
         onSplit: (self: GSAPSplitText) => {
           assignTargets(self);
           return gsap.fromTo(
@@ -165,9 +181,12 @@ const SplitText: React.FC<SplitTextProps> = ({
     const Tag = (tag || 'p') as React.ElementType;
 
     return (
-      <Tag ref={ref} style={style} className={classes}>
-        {text}
-      </Tag>
+      <>
+        <span className="sr-only">{text}</span>
+        <Tag ref={ref} style={style} className={classes} aria-hidden="true">
+          {text}
+        </Tag>
+      </>
     );
   };
 

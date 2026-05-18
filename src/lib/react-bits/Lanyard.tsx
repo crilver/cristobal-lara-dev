@@ -74,16 +74,13 @@ export default function Lanyard({
   }, []);
 
   return (
-    <div
-      className="relative z-0 w-full h-full flex justify-center items-start"
-      style={{ pointerEvents: 'none' }}
-    >
+    <div className="relative z-0 w-full h-full flex justify-center items-start">
       <Canvas
-        // R3F forces pointerEvents:'auto' on the canvas container by
-        // default. Without overriding it the (full-hero-sized) canvas
-        // eats every click — including the hero CTA buttons beneath it.
-        // The lanyard is purely decorative now, so disable pointer events.
-        style={{ pointerEvents: 'none' }}
+        // Interactive: the card is draggable. This no longer eats the hero
+        // CTA clicks because the whole lanyard layer sits BELOW the hero
+        // text/CTA layer in z-order (LanyardOverlay z-10 vs the text column
+        // z-20, which is pointer-events:none except its own content). Only
+        // the empty right-side region over the card reaches this canvas.
         camera={{ position, fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ alpha: transparent }}

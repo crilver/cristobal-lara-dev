@@ -11,9 +11,11 @@ import Contact from '../components/sections/Contact.tsx';
 <Layout>
   <Nav />
   <main id="main">
-    <!-- Hero uses ogl (Aurora) + Three.js (Lanyard, rendered inside).
-         Must be client-only. -->
-    <Hero client:only="react" />
+    <!-- Hero is server-rendered (HTML + reserved 100dvh height) so the
+         headline paints immediately and nothing shifts below it. The heavy
+         WebGL (ogl Aurora, Three.js Lanyard) is lazy()-imported inside, so
+         SSR never touches WebGL — it hydrates after the static content. -->
+    <Hero client:load />
     <!-- Work uses Motion (TiltedCard) + GSAP (AnimatedContent). client:visible defers JS until scrolled near. -->
     <Work client:visible />
     <About client:visible />

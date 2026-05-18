@@ -48,6 +48,17 @@
   100% { transform: translate(100%, 0%); opacity: 0; }
 }
 
+/* Lightweight, compositor-only entrance used on mobile / reduced-motion in
+   place of the GSAP scroll-reveal. Costs ~0 main-thread time. The global
+   prefers-reduced-motion guard below disables it for RM users (instant). */
+@keyframes rb-fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rb-fade-in {
+  animation: rb-fade-in 0.5s var(--ease-out-quart) both;
+}
+
 @layer base {
   :root {
     --bg: #0a0a0b;

@@ -50,6 +50,10 @@ export default defineConfig({
   },
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: 'viewport',
+    // 'hover' (hover/focus on desktop, touchstart on mobile) instead of
+    // 'viewport': keeps near-instant navigation on intent without eagerly
+    // prefetching all 6 case studies + the resume PDF on the heavy
+    // homepage, which was adding network/CPU contention during load.
+    defaultStrategy: 'hover',
   },
 });

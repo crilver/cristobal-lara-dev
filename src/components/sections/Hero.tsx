@@ -70,8 +70,8 @@ export default function Hero() {
       {/* Text column — vertically centered in the hero so the section
           isn't top-loaded with a dead void below. flex-1 lets it take all
           space between the navbar and the bottom ticker strip. */}
-      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 items-start px-6 pt-20 md:px-12 md:pt-24 lg:items-center">
-        <div className="lg:max-w-[55%]">
+      <div className="pointer-events-none relative z-20 mx-auto flex w-full max-w-[1400px] flex-1 items-start px-6 pt-20 md:px-12 md:pt-24 lg:items-center">
+        <div className="pointer-events-auto lg:max-w-[55%]">
           <AnimatedContent
             direction="horizontal"
             distance={-40}
