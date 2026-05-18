@@ -63,7 +63,7 @@ export const projects: Project[] = [
     year: '2025 → 2026',
     status: 'shipped',
     stack: ['TypeScript', 'Node.js', 'Sentry', 'PostgreSQL', 'CI/CD'],
-    links: { caseStudy: true },
+    links: { live: 'https://nyma.world', caseStudy: true },
   },
   {
     slug: 'bricks-and-bids',
@@ -73,7 +73,7 @@ export const projects: Project[] = [
     year: '2024 → 2025',
     status: 'shipped',
     stack: ['Spring Boot 3.x', 'Java 17', 'Kafka', 'Stripe', 'PostgreSQL'],
-    links: { caseStudy: true },
+    links: { live: 'https://brickbids.io', caseStudy: true },
   },
   {
     slug: 'joinredeemer',

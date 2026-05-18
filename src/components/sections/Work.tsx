@@ -19,7 +19,7 @@ function FeaturedCard({ project, index }: { project: Project; index: number }) {
     'block' + (hasMockup ? ' cv-card' : '') + (hasImage ? ' aa-card' : '');
   return (
     <AnimatedContent direction="vertical" distance={60} duration={1} delay={index * 0.15} threshold={0.1}>
-      <a href={`#project-${project.slug}`} className={cardClass}>
+      <a href={`/projects/${project.slug}`} className={cardClass}>
         <GlareHover
           width="100%"
           height="100%"
@@ -139,7 +139,7 @@ function SupportingCard({ project, index }: { project: Project; index: number })
   const num = `0${index + 3}`;
   return (
     <AnimatedContent direction="vertical" distance={40} duration={0.8} delay={index * 0.08} threshold={0.1}>
-      <a href={`#project-${project.slug}`} className="block">
+      <a href={`/projects/${project.slug}`} className="block">
         <GlareHover
           width="100%"
           height="100%"

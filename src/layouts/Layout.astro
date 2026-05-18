@@ -86,12 +86,28 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString()
           'click',
           function (e) {
             var a = e.target && e.target.closest
-              ? e.target.closest('a[href^="#"]')
+              ? e.target.closest('a[href]')
               : null;
             if (!a) return;
-            var hash = a.getAttribute('href');
-            if (!hash || hash === '#') return;
-            var id = decodeURIComponent(hash.slice(1));
+            var url;
+            try {
+              url = new URL(a.getAttribute('href'), window.location.href);
+            } catch (_) {
+              return;
+            }
+            if (!url.hash || url.hash === '#') return;
+            // Only intercept when the target is on the page we're already
+            // on (e.g. "#work" or "/#work" from the homepage). A link like
+            // "/#work" from /projects/* points elsewhere — let the browser
+            // navigate so the homepage loads and jumps there natively.
+            if (
+              url.pathname !== window.location.pathname ||
+              url.search !== window.location.search
+            ) {
+              return;
+            }
+            var id = decodeURIComponent(url.hash.slice(1));
+            if (!id) return;
             var target = document.getElementById(id);
             if (!target) return;
             e.preventDefault();
@@ -101,7 +117,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString()
             target.scrollIntoView({ behavior: 'auto', block: 'start' });
             // Reflect the hash without triggering the native jump.
             if (history.replaceState) {
-              history.replaceState(null, '', hash);
+              history.replaceState(null, '', url.hash);
             }
           },
           false
