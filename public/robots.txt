@@ -1,0 +1,5 @@
+# cristobal-lara.dev — allow full crawl; nothing here is private.
+User-agent: *
+Allow: /
+
+Sitemap: https://cristobal-lara.dev/sitemap-index.xml

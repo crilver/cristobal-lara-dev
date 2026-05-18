@@ -33,9 +33,32 @@ if (study?.links) for (const l of study.links) links.push(l);
 const heroImage = project.slug === 'coravet' ? '/coravet/dashboard.webp' : null;
 
 const metaDescription = `${project.title}: ${project.tagline}`;
+
+// BreadcrumbList structured data (Home › Work › Project) for rich results.
+const ldEscape = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${site.url}/` },
+    { '@type': 'ListItem', position: 2, name: 'Work', item: `${site.url}/#work` },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: project.title,
+      item: `${site.url}/projects/${project.slug}/`,
+    },
+  ],
+};
 ---
 
 <Layout title={project.title} description={metaDescription}>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={ldEscape(breadcrumbLd)}
+  />
   <Nav />
 
   <main id="main" class="bg-bg text-fg">
