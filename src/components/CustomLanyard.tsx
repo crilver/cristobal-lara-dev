@@ -298,7 +298,6 @@ export default function CustomLanyard() {
           drawRopeCanvas(ropeCanvas, LANYARD_THEME);
           setRopeImage(ropeCanvas.toDataURL('image/png'));
         } catch (err) {
-          // eslint-disable-next-line no-console
           console.warn('[CustomLanyard] Texture generation failed:', err);
         }
       })

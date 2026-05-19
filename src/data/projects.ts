@@ -36,7 +36,7 @@ export const projects: Project[] = [
     status: 'live',
     stack: ['NestJS 11', 'Prisma 7', 'PostgreSQL', 'Astro 5', 'React 19', 'Cloudflare R2'],
     links: {
-      live: 'https://agroveterinaria-coravet.com',
+      live: 'https://agroveterinaria-coravet.com/en',
       caseStudy: true,
     },
     featured: true,

@@ -1,43 +1,72 @@
-# Astro Starter Kit: Minimal
+# cristobal-lara.dev
 
-```sh
-pnpm create astro@latest -- --template minimal
-```
+Personal portfolio of **Cristobal Lara** — full-stack web developer, Vancouver.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+**Live:** https://cristobal-lara.dev
 
-## 🚀 Project Structure
+An editorial-dark, motion-driven single page with deep per-project case
+studies. Built for speed and accessibility: every route scores **90+
+Performance** and a perfect **100 Accessibility / Best Practices / SEO** on
+mobile Lighthouse.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Stack
+
+- **Astro 6** — static output, islands architecture
+- **React 19** — interactive islands only (hero, sections, 3D lanyard)
+- **Tailwind CSS v4** — design tokens, dark/light theming
+- **GSAP** + **Motion** — scroll-driven reveals and the split-text hero
+- **Three.js / React Three Fiber / Rapier** — the draggable lanyard badge
+- **ogl** — the WebGL aurora background
+- **@astrojs/sitemap** — auto sitemap + JSON-LD structured data
+- Deployed on **Cloudflare Pages**
+
+## Highlights
+
+- **Performance-first:** the heavy WebGL is desktop-only and never shipped to
+  phones; the hero is server-rendered (no layout shift), animations degrade to
+  a compositor-only CSS fade on mobile / reduced-motion. CLS ≈ 0, LCP ≈ 2.4s
+  on throttled mobile.
+- **Accessibility:** 100/100 — SSR content, `prefers-reduced-motion` honored,
+  screen-reader-correct split text, focus-visible, skip link.
+- **SEO:** canonical URLs, Open Graph + Twitter cards, `Person` / `WebSite` /
+  `BreadcrumbList` JSON-LD, sitemap, robots.
+- **Data-driven case studies:** `src/data/projects.ts` + `src/data/case-studies.ts`
+  feed a single static `/projects/[slug]` route.
+
+## Project structure
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── pages/
+│   ├── index.astro              # the single-page site
+│   └── projects/[slug].astro    # per-project case study (static)
+├── layouts/Layout.astro         # head, SEO meta, JSON-LD, theme guard
+├── components/
+│   ├── Nav.astro                # nav + mobile menu
+│   └── sections/                # Hero, Work, About, Experience, Contact
+├── lib/react-bits/              # animation/WebGL primitives
+├── data/                        # site, projects, case-study content
+└── styles/global.css            # tokens, theme, keyframes
+public/                          # fonts/assets, OG image, robots.txt
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Local development
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+pnpm install
+pnpm dev        # http://localhost:4321
+pnpm build      # static output to ./dist
+pnpm preview    # serve the production build
+pnpm lint       # ESLint (flat config)
+pnpm format     # Prettier write
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+Requires Node ≥ 22.12 and pnpm.
 
-## 🧞 Commands
+## License
 
-All commands are run from the root of the project, from a terminal:
+Source code is released under the [MIT License](./LICENSE).
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Personal content is **not** covered by the MIT license and remains
+© Cristobal Lara: the written case-study copy, résumé, photographs/headshots,
+and project imagery in `public/`. Please don't reuse those.

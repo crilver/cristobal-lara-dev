@@ -169,13 +169,13 @@ const breadcrumbLd = {
                 </div>
                 <script is:inline>
                   (function () {
-                    var v = document.getElementById('demo-video');
+                    const v = document.getElementById('demo-video');
                     if (!v) return;
-                    var DEFAULT_VOL = 0.15;
-                    var set = function () {
+                    const DEFAULT_VOL = 0.15;
+                    const set = function () {
                       try {
                         v.volume = DEFAULT_VOL;
-                      } catch (e) {}
+                      } catch {}
                     };
                     set();
                     v.addEventListener('loadedmetadata', set, { once: true });

@@ -91,9 +91,9 @@ const websiteLd = {
       // split for visitors whose OS is set to light mode.
       (function () {
         try {
-          var stored = localStorage.getItem('theme');
+          const stored = localStorage.getItem('theme');
           document.documentElement.dataset.theme = stored === 'light' ? 'light' : 'dark';
-        } catch (_) {
+        } catch {
           document.documentElement.dataset.theme = 'dark';
         }
       })();
@@ -119,14 +119,14 @@ const websiteLd = {
         document.addEventListener(
           'click',
           function (e) {
-            var a = e.target && e.target.closest
+            const a = e.target && e.target.closest
               ? e.target.closest('a[href]')
               : null;
             if (!a) return;
-            var url;
+            let url;
             try {
               url = new URL(a.getAttribute('href'), window.location.href);
-            } catch (_) {
+            } catch {
               return;
             }
             if (!url.hash || url.hash === '#') return;
@@ -140,9 +140,9 @@ const websiteLd = {
             ) {
               return;
             }
-            var id = decodeURIComponent(url.hash.slice(1));
+            const id = decodeURIComponent(url.hash.slice(1));
             if (!id) return;
-            var target = document.getElementById(id);
+            const target = document.getElementById(id);
             if (!target) return;
             e.preventDefault();
             // Instant, not smooth: the browser's smooth-scroll engine
