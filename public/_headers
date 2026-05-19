@@ -1,0 +1,43 @@
+# Cloudflare Pages headers. Cache strategy mirrors the CoraVet marketing
+# site (HTML revalidates so deploys show immediately; content-hashed build
+# artifacts cache forever) plus a few conservative security headers. No CSP
+# here on purpose — this static site relies on inline scripts + WebGL +
+# GSAP, and a wrong policy would silently break the hero/lanyard.
+
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000
+
+# Content-hashed build output — safe to cache forever
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static media (not content-hashed, but changes rarely)
+/headshots/*
+  Cache-Control: public, max-age=604800
+/coravet/*
+  Cache-Control: public, max-age=604800
+/aeroanalytics/*
+  Cache-Control: public, max-age=604800
+/assets/*
+  Cache-Control: public, max-age=604800
+/og.jpg
+  Cache-Control: public, max-age=604800
+/favicon.svg
+  Cache-Control: public, max-age=86400
+/favicon.ico
+  Cache-Control: public, max-age=86400
+/Cristobal_Lara_Resume.pdf
+  Cache-Control: public, max-age=86400
+
+# Crawler files — short cache so updates propagate quickly
+/robots.txt
+  Cache-Control: public, max-age=3600
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600
+/sitemap-0.xml
+  Cache-Control: public, max-age=3600
