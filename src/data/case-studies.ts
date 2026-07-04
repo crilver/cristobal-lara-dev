@@ -42,6 +42,18 @@ export interface CaseStudy {
   links?: CaseStudyLink[];
   /** Path to a self-hosted demo video under /public (native <video>). */
   demoVideo?: string;
+  /**
+   * Metadata for the demo video — drives the <video> poster and the
+   * VideoObject JSON-LD (Google won't index a video without it).
+   */
+  demoVideoMeta?: {
+    name: string;
+    description: string;
+    /** Poster/thumbnail path under /public. */
+    thumbnail: string;
+    /** ISO date the video was published on this site. */
+    uploadDate: string;
+  };
 }
 
 export const caseStudies: Record<string, CaseStudy> = {
@@ -105,6 +117,13 @@ export const caseStudies: Record<string, CaseStudy> = {
   aeroanalytics: {
     slug: 'aeroanalytics',
     demoVideo: '/aeroanalytics/demo.mp4',
+    demoVideoMeta: {
+      name: 'AeroAnalytics demo — NASA TEMPO air-quality dashboard',
+      description:
+        'Walkthrough of AeroAnalytics: a continent-scale 3D air-quality heatmap over NASA TEMPO satellite data with per-location dashboards and short-term forecasts. 1st place at NASA Space Apps Challenge 2025, Vancouver.',
+      thumbnail: '/aeroanalytics/dark.webp',
+      uploadDate: '2026-05-17',
+    },
     intro:
       'A web app that ingests NASA TEMPO satellite data plus ground-based stations and visualizes air quality across North America on an interactive continent-scale map and per-location dashboard. Built in a 48-hour hackathon by a team of six; I was one of three full-stack engineers, focused on the React/TypeScript frontend.',
     context:

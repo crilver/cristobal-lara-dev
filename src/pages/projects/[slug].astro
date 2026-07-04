@@ -50,6 +50,21 @@ const breadcrumbLd = {
     },
   ],
 };
+
+// VideoObject structured data. Without it Google has no video metadata at
+// all and reports the demo as unindexable ("video isn't on a watch page").
+const videoLd =
+  study?.demoVideo && study.demoVideoMeta
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        name: study.demoVideoMeta.name,
+        description: study.demoVideoMeta.description,
+        thumbnailUrl: new URL(study.demoVideoMeta.thumbnail, site.url).toString(),
+        contentUrl: new URL(study.demoVideo, site.url).toString(),
+        uploadDate: study.demoVideoMeta.uploadDate,
+      }
+    : null;
 ---
 
 <Layout title={project.title} description={metaDescription}>
@@ -59,6 +74,11 @@ const breadcrumbLd = {
     is:inline
     set:html={ldEscape(breadcrumbLd)}
   />
+  {
+    videoLd && (
+      <script slot="head" type="application/ld+json" is:inline set:html={ldEscape(videoLd)} />
+    )
+  }
   <Nav />
 
   <main id="main" class="bg-bg text-fg">
@@ -159,7 +179,7 @@ const breadcrumbLd = {
                   <video
                     id="demo-video"
                     src={study.demoVideo}
-                    poster="/aeroanalytics/dark.webp"
+                    poster={study.demoVideoMeta?.thumbnail}
                     controls
                     playsinline
                     preload="metadata"
@@ -276,7 +296,7 @@ const breadcrumbLd = {
         class="mt-24 flex items-stretch justify-between gap-6 border-t border-border-subtle pt-10"
       >
         <a
-          href={`/projects/${prev.slug}`}
+          href={`/projects/${prev.slug}/`}
           class="group flex-1 rounded-xl border border-border-subtle p-6 transition-colors hover:border-accent"
         >
           <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-fg">
@@ -287,7 +307,7 @@ const breadcrumbLd = {
           </p>
         </a>
         <a
-          href={`/projects/${next.slug}`}
+          href={`/projects/${next.slug}/`}
           class="group flex-1 rounded-xl border border-border-subtle p-6 text-right transition-colors hover:border-accent"
         >
           <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-fg">
